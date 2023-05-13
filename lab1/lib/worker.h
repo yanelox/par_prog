@@ -116,7 +116,7 @@ class Worker
             MPI_Status status;
             MPI_Recv (&a, 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, &status);
         }
-
+        
         int res = scheme.print();
 
         if (rank != commsize - 1)
