@@ -3,6 +3,7 @@
 #include <time.h>
 #include <random>
 #include <iostream>
+#include <sstream>
 
 #define TAG 223
 
@@ -26,23 +27,27 @@ int main (int argc, char* argv[])
     {
         MPI_Send (&res, 1, MPI_INT, 1, TAG, MPI_COMM_WORLD);
 
-        MPI_Recv (&res, 1, MPI_INT, commsize - 1, TAG, MPI_COMM_WORLD, NULL);
-
-        std::cout << "rank 0; send 42, get " << res << "\n"; 
+        // MPI_Recv (&res, 1, MPI_INT, commsize - 1, TAG, MPI_COMM_WORLD, NULL);
+        
+        std::stringstream tmp;
+        tmp << "rank 0; send 42, get " << res << "\n"; 
+        std::cout << tmp.str();  
     }
 
     else
     {
         MPI_Recv (&res, 1, MPI_INT, rank - 1, TAG, MPI_COMM_WORLD, NULL);
-
-        std::cout << "rank " << rank << "; get " << res << ", send " << res + r << std::endl;
+        
+        std::stringstream tmp;
+        tmp << "rank " << rank << "; get " << res << ", send " << res + r << std::endl;
+        std::cout << tmp.str();
 
         res += r;
 
-        if (rank == commsize - 1)
-            MPI_Send (&res, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD);
+        if (rank != commsize - 1)
+        //     MPI_Send (&res, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD);
         
-        else
+        // else
             MPI_Send (&res, 1, MPI_INT, rank + 1, TAG, MPI_COMM_WORLD);
     }
     

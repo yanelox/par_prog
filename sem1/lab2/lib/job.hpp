@@ -1,5 +1,6 @@
 #include <functional>
 #include <cmath>
+#include <limits>
 
 struct Job
 {
@@ -40,7 +41,7 @@ struct Job
         f_start = job.f_start;
         f_end   = job.f_mid;
         S_all   = job.S_start_mid;
-        eps     = job.eps;
+        eps     = job.eps / 2;
     }
 
     void init_with_second (Job job)
@@ -51,7 +52,7 @@ struct Job
         f_start = job.f_mid;
         f_end   = job.f_end;
         S_all   = job.S_mid_end;
-        eps     = job.eps;
+        eps     = job.eps / 2;
     }
 
     double run ()
@@ -64,7 +65,7 @@ struct Job
 
         double S_sum = S_start_mid + S_mid_end;
 
-        if (fabs (S_all - S_sum) >= eps * fabs(S_sum))
+        if (std::abs (S_all - S_sum) >= eps * std::abs(S_sum) && std::abs (S_all - S_sum) > std::numeric_limits<double>::epsilon())
             return 0.0;
         
         success = 1;

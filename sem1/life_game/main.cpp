@@ -23,7 +23,7 @@ int main (int argc, char* argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &commsize);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int size = 500;
+    int size = 1000;
 
     std::vector <int> init (size * size);
     randomize (init);

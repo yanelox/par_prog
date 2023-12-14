@@ -17,9 +17,13 @@ int main (int argc, char* argv[])
     if (rank == 0)
     {
         double a;
+        MPI_Status stat;
 
-        for (int i = 0; i < 1000000; ++i)
-            MPI_Send (&a, 1, MPI_DOUBLE, 1, i, MPI_COMM_WORLD);
+        for (int i = 0; i < 100000; ++i)
+        {
+            MPI_Send (&a, 1, MPI_DOUBLE, 1, 1, MPI_COMM_WORLD);
+            MPI_Recv (&a, 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD, &stat);
+        }
     }
 
     if (rank == 1)
@@ -27,8 +31,11 @@ int main (int argc, char* argv[])
         double a;
         MPI_Status stat;
 
-        for (int i = 0; i < 1000000; ++i)
-            MPI_Recv (&a, 1, MPI_DOUBLE, 0, i, MPI_COMM_WORLD, &stat);
+        for (int i = 0; i < 100000; ++i)
+        {
+            MPI_Recv (&a, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &stat);
+            MPI_Send (&a, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        }
     }
 
 
